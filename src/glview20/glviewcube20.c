@@ -291,7 +291,7 @@ static void create_indicator(appdata_s *ad) {
 static Evas_Object* add_win(const char *name) {
 	Evas_Object *win;
 
-	elm_config_accel_preference_set("opengl");
+	elm_config_accel_preference_set("opengl:depth24");
 	win = elm_win_util_standard_add(name, "OpenGL example: Cube");
 	evas_object_resize(win, 360, 480);
 
@@ -338,7 +338,10 @@ static Eina_Bool app_create(void *data) {
 	evas_object_size_hint_weight_set(gl, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 
 	/* Request a surface with alpha and a depth buffer */
-	elm_glview_mode_set(gl, ELM_GLVIEW_DEPTH);
+        if (getenv("DIRECT"))
+	  elm_glview_mode_set(gl, ELM_GLVIEW_DEPTH|ELM_GLVIEW_DIRECT);
+        else
+	  elm_glview_mode_set(gl, ELM_GLVIEW_DEPTH);
 
 	/* The resize policy tells GLView what to do with the surface when it
 	 * resizes. ELM_GLVIEW_RESIZE_POLICY_RECREATE will tell it to

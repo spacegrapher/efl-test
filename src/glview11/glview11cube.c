@@ -42,11 +42,11 @@ printf("%s\n", __func__);
    //elm_table_pack(ad->table, obj, 1, 1, 3, 1);
    evas_object_data_set(obj, APPDATA_KEY, ad);
 
-   elm_glview_mode_set(obj,
-                       ELM_GLVIEW_ALPHA
-                       //| ELM_GLVIEW_DEPTH
-                       | ELM_GLVIEW_DIRECT
-                       );
+   if (!getenv("DIRECT"))
+     elm_glview_mode_set(obj, ELM_GLVIEW_ALPHA | ELM_GLVIEW_DEPTH);
+   else
+     elm_glview_mode_set(obj, ELM_GLVIEW_ALPHA | ELM_GLVIEW_DEPTH | ELM_GLVIEW_DIRECT);
+
    elm_glview_resize_policy_set(obj, ELM_GLVIEW_RESIZE_POLICY_RECREATE);
    elm_glview_render_policy_set(obj, ELM_GLVIEW_RENDER_POLICY_ON_DEMAND);
 
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
 
    /* Force OpenGL engine */
    elm_init(argc, argv);
-   elm_config_accel_preference_set("opengl");
+   elm_config_accel_preference_set("opengl:depth24");
 
    /* Add a window */
    ad->win = o = elm_win_add(NULL, "glview", ELM_WIN_BASIC);
